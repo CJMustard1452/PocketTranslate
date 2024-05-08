@@ -38,7 +38,6 @@ class PocketTranslate {
     }
 
     public static function executeListeners(TranslatedChatEvent $translatedChatEvent): void {
-        var_dump($translatedChatEvent);
         foreach(self::$listeners as $listener) {
             $listener($translatedChatEvent);
         }

@@ -2,9 +2,9 @@
 
 namespace CJMustard1452\translate\thread;
 
-use pmmp\thread\ThreadSafeArray;
 use CJMustard1452\translate\event\TranslatedChatEvent;
 use CJMustard1452\translate\Loader;
+use pmmp\thread\ThreadSafeArray;
 
 class ThreadManager {
 

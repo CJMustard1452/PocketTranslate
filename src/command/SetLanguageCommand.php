@@ -2,12 +2,12 @@
 
 namespace CJMustard1452\translate\command;
 
-use pocketmine\command\Command;
-use pocketmine\command\CommandSender;
-use pocketmine\player\Player;
-use pocketmine\plugin\PluginOwned;
-use CJMustard1452\translate\Loader;
 use CJMustard1452\translate\PocketTranslate;
+use pocketmine\command\CommandSender;
+use CJMustard1452\translate\Loader;
+use pocketmine\plugin\PluginOwned;
+use pocketmine\command\Command;
+use pocketmine\player\Player;
 
 class SetLanguageCommand extends Command implements PluginOwned {
 

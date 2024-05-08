@@ -2,9 +2,9 @@
 
 namespace CJMustard1452\translate;
 
-use Closure;
 use CJMustard1452\translate\event\TranslatedChatEvent;
 use CJMustard1452\translate\thread\ThreadManager;
+use Closure;
 
 class PocketTranslate {
 

@@ -2,12 +2,12 @@
 
 namespace CJMustard1452\translate;
 
-use pocketmine\plugin\PluginBase;
-use pocketmine\scheduler\ClosureTask;
-use pocketmine\utils\Config;
 use CJMustard1452\translate\command\SetLanguageCommand;
 use CJMustard1452\translate\listener\TranslationListener;
 use CJMustard1452\translate\thread\ThreadManager;
+use pocketmine\scheduler\ClosureTask;
+use pocketmine\plugin\PluginBase;
+use pocketmine\utils\Config;
 
 class Loader extends PluginBase {
 

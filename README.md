@@ -22,8 +22,8 @@ PocketTranslate is a plugin for PocketMine-MP v5, designed to facilitate live ch
 ## Configuration
 
 1. Generate a Google Cloud Translation API key from the [Google Cloud Console](https://console.cloud.google.com).
-2. Open the `config.yml` file located in the `plugins/PocketTranslate` directory.
-3. Enter your Google Cloud Translation API key in the `api_key` field.
+2. Open the `config.yml` file located in the `plugin_data/PocketTranslate` directory.
+3. Enter your Google Cloud Translation API key in the `APIKey` field.
 
 ## Usage
 

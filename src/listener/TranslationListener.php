@@ -21,6 +21,7 @@ class TranslationListener implements Listener {
         }
 
         PocketTranslate::TranslateMessages($langs, $playerChatEvent->getMessage(), $lang);
+        $playerChatEvent->cancel();
     }
 
     public function onJoin(PlayerJoinEvent $playerJoinEvent): void {

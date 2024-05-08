@@ -30,7 +30,7 @@ PocketTranslate is a plugin for PocketMine-MP v5, designed to facilitate live ch
 ### Translate a Message
 
 ```php
-use CJMustard1452\translate\PocketTranslate
+use CJMustard1452\translate\PocketTranslate;
 
 $handler = function($data) {
   //Handle $data

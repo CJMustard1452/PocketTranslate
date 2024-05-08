@@ -15,7 +15,7 @@ PocketTranslate is a plugin for PocketMine-MP v5, designed to facilitate live ch
 
 ## Installation
 
-1. Download the latest release of PocketTranslate from the [GitHub repository](https://github.com/example/repository).
+1. Download the latest release of PocketTranslate from the [GitHub repository]([https://github.com/example/repository](https://github.com/CJMustard1452/PocketTranslate)).
 2. Place the `PocketTranslate.phar` file into the `plugins` directory of your PocketMine-MP server.
 3. Restart or reload your server.
 

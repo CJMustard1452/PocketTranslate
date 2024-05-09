@@ -8,17 +8,29 @@ use CJMustard1452\translate\Loader;
 use pocketmine\plugin\PluginOwned;
 use pocketmine\command\Command;
 use pocketmine\player\Player;
+use ReflectionClass;
 
 class SetLanguageCommand extends Command implements PluginOwned {
 
     private Loader $plugin;
-    private array $lang = ["en", "es", "fr", "zh-TW", "zh-CN", "uk", "tr", "sv", "ru", "iw", "de", "fil", "ar", "nl"];
+    private string $sorted;
+    private array $lang = [];
 
     public function __construct(Loader $loader) {
         $this->plugin = $loader;
 
         parent::__construct("setlanguage", "Translation language selection.");
         $this->setPermission('setlanguage.cmd');
+
+        $pt = new ReflectionClass(PocketTranslate::class);
+
+        $sorted = [];
+        foreach($pt->getConstants() as $name => $key) {
+            $this->lang[] = $key;
+            $sorted[] = $name . " => " . $key . "\n";
+        }
+
+        $this->sorted = "§c" . implode($sorted);
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args): void {
@@ -28,15 +40,13 @@ class SetLanguageCommand extends Command implements PluginOwned {
         }
 
         if(!isset($args[0])) {
-            $sender->sendMessage("Please enter a language code\n" . implode(", ", $this->lang));
+            $sender->sendMessage("Please enter a language code:\n" . $this->sorted);
             return;
         }
 
         if(!in_array($args[0], $this->lang)) {
-            if(!isset($args[0])) {
-                $sender->sendMessage("Please enter a language valid code\n" . implode(", ", $this->lang));
-                return;
-            }
+            $sender->sendMessage("Please enter a language valid code:\n" . $this->sorted);
+            return;
         }
 
         PocketTranslate::updatePlayerLanguage($sender->getName(), $args[0]);

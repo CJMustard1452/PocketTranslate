@@ -19,13 +19,14 @@ class ThreadManager {
         self::$thread = new TranslateThread($notifer, $loader::$config["APIKey"]);
     }
 
-    public static function addRequest(array $languages, string $content, ?string $origin = null): void {
+    public static function addRequest(array $languages, string $content, ?string $username = null, ?string $origin = null): void {
         foreach($languages as $language) {
             $data = [
                 "id" => self::$id,
                 "language" => $language,
                 "content" => $content,
-                "origin" => $origin
+                "origin" => $origin,
+                "username" => $username
             ];
     
             self::$id++;
@@ -38,6 +39,6 @@ class ThreadManager {
     }
 
     public static function collectResults(ThreadSafeArray $data): void {
-        new TranslatedChatEvent($data["detectedSourceLanguage"], $data['translatedText']);
+        new TranslatedChatEvent($data["language"], $data['translatedText'], $data['username']);
     }
 }

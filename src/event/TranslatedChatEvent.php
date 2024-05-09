@@ -8,7 +8,8 @@ class TranslatedChatEvent {
 
     public function __construct(
         public string $language,
-        public string $content
+        public string $content,
+        public ?string $username
     ) {
         PocketTranslate::executeListeners($this);
     }

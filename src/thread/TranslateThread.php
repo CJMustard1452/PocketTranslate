@@ -32,8 +32,6 @@ class TranslateThread extends Thread {
                 if($data['origin'] == null) $body = [ "q" => $data['content'], "target" => $data['language'] ];
                 else $body = [ "q" => $data['content'], "target" => $data['language'], "source" => $data['origin']];
 
-                if($body['target'] == $data['origin']) continue;
-
                 $ch = curl_init("https://translation.googleapis.com/language/translate/v2?key=" . $this->apikey);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
                 curl_setopt($ch, CURLOPT_POST, true);
@@ -44,13 +42,11 @@ class TranslateThread extends Thread {
                 $response = curl_exec($ch);
 
                 if(!isset(json_decode($response, true)['data']['translations'][0]['translatedText'])) continue;
+                $return["translatedText"] = json_decode($response, true)['data']['translations'][0]['translatedText'];
+                $return["target"] = $body["target"];
+                $return["username"] = $data['username'];
 
-                $data = [
-                    "detectedSourceLanguage" =>  json_decode($response, true)['data']['translations'][0]['detectedSourceLanguage'],
-                    "translatedText" => json_decode($response, true)['data']['translations'][0]['translatedText'],
-                ];
-
-                $this->results[] = ThreadSafeArray::fromArray($data);
+                $this->results[] = $return;
             }
             
             $notifier->wakeupSleeper();

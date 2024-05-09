@@ -33,8 +33,8 @@ class PocketTranslate {
         ThreadManager::addRequest([$language], $content, $origin);
     }
 
-    public static function TranslateMessages(array $languages, string $content, ?string $origin): void {
-        ThreadManager::addRequest($languages, $content, $origin);
+    public static function TranslateMessages(array $languages, string $content, ?string $username = null, ?string $origin = null): void {
+        ThreadManager::addRequest($languages, $content, $username, $origin);
     }
 
     public static function executeListeners(TranslatedChatEvent $translatedChatEvent): void {

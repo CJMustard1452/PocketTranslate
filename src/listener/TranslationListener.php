@@ -15,13 +15,13 @@ class TranslationListener implements Listener {
         $langs = [];
         foreach(Server::getInstance()->getOnlinePlayers() as $player) {
             $lang = PocketTranslate::getPlayerLanguage($player->getName());
+            if(PocketTranslate::getPlayerLanguage($playerChatEvent->getPlayer()->getName()) == $lang) continue;
             if(!isset($lang) || in_array($lang, $langs)) continue;
 
             $langs[] = $lang;
         }
 
-        PocketTranslate::TranslateMessages($langs, $playerChatEvent->getMessage(), $lang);
-        $playerChatEvent->cancel();
+        PocketTranslate::TranslateMessages($langs, $playerChatEvent->getMessage(), $playerChatEvent->getPlayer()->getName(), null);
     }
 
     public function onJoin(PlayerJoinEvent $playerJoinEvent): void {

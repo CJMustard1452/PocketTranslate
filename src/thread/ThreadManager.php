@@ -39,6 +39,6 @@ class ThreadManager {
     }
 
     public static function collectResults(ThreadSafeArray $data): void {
-        new TranslatedChatEvent($data["language"], $data['translatedText'], $data['username']);
+        new TranslatedChatEvent($data["target"], $data['translatedText'], $data['username']);
     }
 }

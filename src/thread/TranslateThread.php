@@ -46,7 +46,7 @@ class TranslateThread extends Thread {
                 $return["target"] = $body["target"];
                 $return["username"] = $data['username'];
 
-                $this->results[] = $return;
+                $this->results[] = ThreadSafeArray::fromArray($return);
             }
             
             $notifier->wakeupSleeper();

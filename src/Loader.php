@@ -36,7 +36,7 @@ class Loader extends PluginBase {
         new PocketTranslate();
 
         $this->getServer()->getPluginManager()->registerEvents(new TranslationListener(), $this);
-        $this->getServer()->getCommandMap()->register("setlanguage", new SetLanguageCommand($this));
+        $this->getServer()->getCommandMap()->register("pockettranslate", new SetLanguageCommand($this));
     }
 
     public function onDisable(): void {

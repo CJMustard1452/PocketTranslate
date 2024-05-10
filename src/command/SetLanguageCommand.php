@@ -20,7 +20,7 @@ class SetLanguageCommand extends Command implements PluginOwned {
         $this->plugin = $loader;
 
         parent::__construct("setlanguage", "Translation language selection.");
-        $this->setPermission('setlanguage.cmd');
+        $this->setPermission('pockettranslate.setlanguage.cmd');
 
         $pt = new ReflectionClass(PocketTranslate::class);
 

@@ -6,6 +6,6 @@ api: 5.15.0
 src-namespace-prefix: CJMustard1452\translate
 
 permissions:
-  setlanguage.cmd:
+  pockettranslate.setlanguage.cmd:
     default: true
 ...

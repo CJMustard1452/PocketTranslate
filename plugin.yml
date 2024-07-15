@@ -1,6 +1,6 @@
 ---
 name: PocketTranslate
-version: 1.0.1
+version: 1.0.3
 main: CJMustard1452\translate\Loader
 api: 5.15.0
 src-namespace-prefix: CJMustard1452\translate

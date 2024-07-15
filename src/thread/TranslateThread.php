@@ -44,6 +44,7 @@ class TranslateThread extends Thread {
                 if(!isset(json_decode($response, true)['data']['translations'][0]['translatedText'])) continue;
                 $return["translatedText"] = json_decode($response, true)['data']['translations'][0]['translatedText'];
                 $return["target"] = $body["target"];
+                $return["origin"] = $data["content"];
                 $return["username"] = $data['username'];
 
                 $this->results[] = ThreadSafeArray::fromArray($return);

@@ -27,14 +27,18 @@ PocketTranslate is a plugin for PocketMine-MP v5, designed to facilitate live ch
 
 ## Usage
 
-### Translate a Message
+### Add ChatTranslationEvent to your listener.
 
 ```php
-use CJMustard1452\translate\PocketTranslate;
+use CJMustard1452\translate\ChatTranslateEvent;
 
-$handler = function($data) {
-  //Handle $data
+    /**
+	 * @param string $chatTranslateEvent->getLanguage()      The language the message has been translated to.
+	 * @param string $chatTranslateEvent->getContent()       The post translated content.
+   * @param string $chatTranslateEvent->getOrigin()        The origin language.
+	 * @param string|null $chatTranslateEvent->getUsername() The players username
+	 */
+public function onTranslate(ChatTranslateEvent $chatTranslateEvent): void {
+  // handle $chatTranslateEvent
 };
-
-PocketTranslate::RegisterListener($handler);
 ```

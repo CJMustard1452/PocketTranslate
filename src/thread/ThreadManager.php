@@ -2,7 +2,7 @@
 
 namespace CJMustard1452\translate\thread;
 
-use CJMustard1452\translate\event\TranslatedChatEvent;
+use CJMustard1452\translate\ChatTranslateEvent;
 use CJMustard1452\translate\Loader;
 use pmmp\thread\ThreadSafeArray;
 
@@ -39,6 +39,8 @@ class ThreadManager {
     }
 
     public static function collectResults(ThreadSafeArray $data): void {
-        new TranslatedChatEvent($data["target"], $data['translatedText'], $data['username']);
+        $event = new ChatTranslateEvent($data["target"], $data['translatedText'], $data['origin'], $data['username']);
+
+        $event->call();
     }
 }

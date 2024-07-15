@@ -2,13 +2,9 @@
 
 namespace CJMustard1452\translate;
 
-use CJMustard1452\translate\event\TranslatedChatEvent;
 use CJMustard1452\translate\thread\ThreadManager;
-use Closure;
 
 class PocketTranslate {
-
-    public static array $listeners = [];
 
     public const ENGLISH = "en";
     public const SPANISH = "es";
@@ -25,22 +21,12 @@ class PocketTranslate {
     public const ARABIC = "ar";
     public const DUTCH = "nl";
 
-    public static function RegisterListener(Closure $closure): void {
-        self::$listeners[] = $closure;
-    }
-
     public static function TranslateMessage(string $language, string $content, ?string $origin): void {
         ThreadManager::addRequest([$language], $content, $origin);
     }
 
     public static function TranslateMessages(array $languages, string $content, ?string $username = null, ?string $origin = null): void {
         ThreadManager::addRequest($languages, $content, $username, $origin);
-    }
-
-    public static function executeListeners(TranslatedChatEvent $translatedChatEvent): void {
-        foreach(self::$listeners as $listener) {
-            $listener($translatedChatEvent);
-        }
     }
 
     public static function updatePlayerLanguage(string $name, string $lang): void {

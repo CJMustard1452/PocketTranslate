@@ -40,12 +40,12 @@ class SetLanguageCommand extends Command implements PluginOwned {
         }
 
         if(!isset($args[0])) {
-            $sender->sendMessage("Please enter a language code:\n" . $this->sorted);
+            $sender->sendMessage("Please enter a language code:\n $this->sorted");
             return;
         }
 
         if(!in_array($args[0], $this->lang)) {
-            $sender->sendMessage("Please enter a language valid code:\n" . $this->sorted);
+            $sender->sendMessage("Please enter a language valid code:\n $this->sorted");
             return;
         }
 

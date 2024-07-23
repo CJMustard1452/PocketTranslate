@@ -11,12 +11,12 @@ class ThreadManager {
     private static TranslateThread $thread;
     private static int $id = 0;
 
-    public function __construct(Loader $loader) {
-        $notifer = $loader->getServer()->getTickSleeper()->addNotifier(function (): void {
+    public function __construct() {
+        $notifer = Loader::getInstance()->getServer()->getTickSleeper()->addNotifier(function (): void {
             self::$thread->collectResults();
         });
 
-        self::$thread = new TranslateThread($notifer, $loader::$config["APIKey"]);
+        self::$thread = new TranslateThread($notifer, Loader::$config["APIKey"]);
     }
 
     public static function addRequest(array $languages, string $content, ?string $username = null, ?string $origin = null): void {

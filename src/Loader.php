@@ -4,17 +4,22 @@ namespace CJMustard1452\translate;
 
 use CJMustard1452\translate\command\SetLanguageCommand;
 use CJMustard1452\translate\listener\TranslationListener;
+use CJMustard1452\translate\task\CheckAPIKeyTask;
+use CJMustard1452\translate\task\InvalidKeyTask;
 use CJMustard1452\translate\thread\ThreadManager;
 use pocketmine\scheduler\ClosureTask;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use pocketmine\utils\SingletonTrait;
 
 class Loader extends PluginBase {
+    use SingletonTrait;
 
     public static array $config = [];
     public static array $players = [];
 
     public function onEnable(): void {
+        self::setInstance($this);
         $config = new Config($this->getDataFolder() . 'config.yml');
         if(isset($config->getAll()['config'])) self::$config = $config->getAll()['config'];
         if(isset($config->getAll()['players'])) self::$players = $config->getAll()['players'];
@@ -28,15 +33,21 @@ class Loader extends PluginBase {
         }
 
         if (!self::$config["APIKey"]) {
-            $this->missingKey();
+            $this->getScheduler()->scheduleDelayedTask(new InvalidKeyTask(), $this->getServer()->getTicksPerSecond());
             return;
         }
 
-        new ThreadManager($this);
+        $this->getServer()->getAsyncPool()->submitTask(new CheckAPIKeyTask(self::$config["APIKey"]));
+    }
+
+    public static function enable(): void {
+        $instance = self::getInstance();
+
+        new ThreadManager();
         new PocketTranslate();
 
-        $this->getServer()->getPluginManager()->registerEvents(new TranslationListener(), $this);
-        $this->getServer()->getCommandMap()->register("pockettranslate", new SetLanguageCommand($this));
+        $instance->getServer()->getPluginManager()->registerEvents(new TranslationListener(), $instance);
+        $instance->getServer()->getCommandMap()->register("pockettranslate", new SetLanguageCommand($instance));
     }
 
     public function onDisable(): void {
@@ -49,15 +60,5 @@ class Loader extends PluginBase {
         $config->save();
 
         ThreadManager::shutdown();
-    }
-
-    private function missingKey(): void {
-        $this->getLogger()->notice("Missing Google Translate API Key...
-        - If you already have one, please insert it into ./plugin_data/PocketTranslate/config.yml
-        - If you don't have a key yet, find out how to get one by visiting https://cloud.google.com/translate/.");
-
-        $this->getScheduler()->scheduleDelayedTask(new ClosureTask(function() {
-            $this->getServer()->getPluginManager()->disablePlugin($this);
-        }), $this->getServer()->getTicksPerSecond());
     }
 }

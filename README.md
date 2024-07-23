@@ -1,4 +1,7 @@
 # PocketTranslate Plugin for PocketMine-MP v5
+[![](https://poggit.pmmp.io/shield.api/PocketTranslate)](https://poggit.pmmp.io/p/PocketTranslate)
+[![](https://poggit.pmmp.io/shield.state/PocketTranslate)](https://poggit.pmmp.io/p/PocketTranslate)
+[![](https://poggit.pmmp.io/shield.dl.total/PocketTranslate)](https://poggit.pmmp.io/p/PocketTranslate)
 
 PocketTranslate is a plugin for PocketMine-MP v5, designed to facilitate live chat translations within your server using the Google Cloud Translation API. With PocketTranslate, developers can seamlessly integrate translation capabilities into their plugins, enhancing communication and accessibility for players from different linguistic backgrounds.
 

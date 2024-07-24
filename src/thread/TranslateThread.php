@@ -1,66 +1,104 @@
 <?php
 
+/*
+ *
+ *  ____     ___     ____   _  __  _____   _____   _____   ____       _      _   _   ____    _          _      _____   _____
+ * |  _ \   / _ \   / ___| | |/ / | ____| |_   _| |_   _| |  _ \     / \    | \ | | / ___|  | |        / \    |_   _| | ____|
+ * | |_) | | | | | | |     | ' /  |  _|     | |     | |   | |_) |   / _ \   |  \| | \___ \  | |       / _ \     | |   |  _|
+ * |  __/  | |_| | | |___  | . \  | |___    | |     | |   |  _ <   / ___ \  | |\  |  ___) | | |___   / ___ \    | |   | |___
+ * |_|      \___/   \____| |_|\_\ |_____|   |_|     |_|   |_| \_\ /_/   \_\ |_| \_| |____/  |_____| /_/   \_\   |_|   |_____|
+ *
+ * Copyright 2024 CJMustard1452
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”),
+ * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @author CJMustard1452
+ * @link https://github.com/CJMustard1452/PocketTranslate
+ *
+ *
+ */
+
+declare(strict_types=1);
+
 namespace CJMustard1452\translate\thread;
 
-use pocketmine\snooze\SleeperHandlerEntry;
 use pmmp\thread\ThreadSafeArray;
+use pocketmine\snooze\SleeperHandlerEntry;
 use pocketmine\thread\Thread;
+use function curl_exec;
+use function curl_init;
+use function curl_setopt;
+use function json_decode;
+use function json_encode;
+use const CURLOPT_HTTPHEADER;
+use const CURLOPT_POST;
+use const CURLOPT_POSTFIELDS;
+use const CURLOPT_RETURNTRANSFER;
+use const CURLOPT_SSL_VERIFYPEER;
 
 class TranslateThread extends Thread {
 
-    private SleeperHandlerEntry $notifier;
-    public ThreadSafeArray $results;
-    public ThreadSafeArray $queue;
-    public bool $running = true;
-    private string $apikey;
+	private SleeperHandlerEntry $notifier;
+	public ThreadSafeArray $results;
+	public ThreadSafeArray $queue;
+	public bool $running = true;
+	private string $apikey;
 
-    public function __construct(SleeperHandlerEntry $notifier, string $apikey) {
-        $this->notifier = $notifier;
-        $this->apikey = $apikey;
+	public function __construct(SleeperHandlerEntry $notifier, string $apikey) {
+		$this->notifier = $notifier;
+		$this->apikey = $apikey;
 
-        $this->results = new ThreadSafeArray();
-        $this->queue = new ThreadSafeArray();
+		$this->results = new ThreadSafeArray();
+		$this->queue = new ThreadSafeArray();
 
-        $this->start();
-    }
+		$this->start();
+	}
 
-    public function onRun(): void {
-        $notifier = $this->notifier->createNotifier();
+	public function onRun() : void {
+		$notifier = $this->notifier->createNotifier();
 
-        while($this->running) {
-            while(($data = $this->queue->shift()) !== null) {
-                if($data['origin'] == null) $body = [ "q" => $data['content'], "target" => $data['language'] ];
-                else $body = [ "q" => $data['content'], "target" => $data['language'], "source" => $data['origin']];
+		while($this->running) {
+			while(($data = $this->queue->shift()) !== null) {
+				if($data['origin'] == null) $body = [ "q" => $data['content'], "target" => $data['language'] ];
+				else $body = [ "q" => $data['content'], "target" => $data['language'], "source" => $data['origin']];
 
-                $ch = curl_init("https://translation.googleapis.com/language/translate/v2?key=" . $this->apikey);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
-                    
-                $response = curl_exec($ch);
+				$ch = curl_init("https://translation.googleapis.com/language/translate/v2?key=" . $this->apikey);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
+				curl_setopt($ch, CURLOPT_POST, true);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
 
-                if(!isset(json_decode($response, true)['data']['translations'][0]['translatedText'])) continue;
-                $return["translatedText"] = json_decode($response, true)['data']['translations'][0]['translatedText'];
-                $return["target"] = $body["target"];
-                $return["origin"] = $data["content"];
-                $return["username"] = $data['username'];
+				$response = curl_exec($ch);
 
-                $this->results[] = ThreadSafeArray::fromArray($return);
-            }
-            
-            $notifier->wakeupSleeper();
-        }
-    }
+				if(!isset(json_decode($response, true)['data']['translations'][0]['translatedText'])) continue;
+				$return["translatedText"] = json_decode($response, true)['data']['translations'][0]['translatedText'];
+				$return["target"] = $body["target"];
+				$return["origin"] = $data["content"];
+				$return["username"] = $data['username'];
 
-    public function addRequest(array $array): void {
-        $this->queue[] = ThreadSafeArray::fromArray($array);
-    }
+				$this->results[] = ThreadSafeArray::fromArray($return);
+			}
 
-    public function collectResults(): void {
-        while(($result = $this->results->shift()) !== null) {
-            ThreadManager::collectResults($result);
-        }
-    }
+			$notifier->wakeupSleeper();
+		}
+	}
+
+	public function addRequest(array $array) : void {
+		$this->queue[] = ThreadSafeArray::fromArray($array);
+	}
+
+	public function collectResults() : void {
+		while(($result = $this->results->shift()) !== null) {
+			ThreadManager::collectResults($result);
+		}
+	}
 }

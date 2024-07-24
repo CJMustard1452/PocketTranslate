@@ -7,10 +7,9 @@ use CJMustard1452\translate\listener\TranslationListener;
 use CJMustard1452\translate\task\CheckAPIKeyTask;
 use CJMustard1452\translate\task\InvalidKeyTask;
 use CJMustard1452\translate\thread\ThreadManager;
-use pocketmine\scheduler\ClosureTask;
+use pocketmine\utils\SingletonTrait;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
-use pocketmine\utils\SingletonTrait;
 
 class Loader extends PluginBase {
     use SingletonTrait;

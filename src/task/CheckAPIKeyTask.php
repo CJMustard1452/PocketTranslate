@@ -35,6 +35,7 @@ use pocketmine\scheduler\AsyncTask;
 use function curl_exec;
 use function curl_init;
 use function curl_setopt;
+use function intval;
 use function json_decode;
 use function json_encode;
 use const CURLOPT_HTTPHEADER;
@@ -75,7 +76,7 @@ class CheckAPIKeyTask extends AsyncTask {
 
 		$data = json_decode($this->response, true);
 		if(isset($data["error"]) && $data["error"]["message"] == self::ERROR_MESSAGE) {
-			$instance->getScheduler()->scheduleDelayedTask(new InvalidKeyTask(), $instance->getServer()->getTicksPerSecond());
+			$instance->getScheduler()->scheduleDelayedTask(new InvalidKeyTask(), intval($instance->getServer()->getTicksPerSecond()));
 
 			return;
 		}

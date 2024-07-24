@@ -38,6 +38,7 @@ use CJMustard1452\translate\thread\ThreadManager;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
+use function intval;
 
 class Loader extends PluginBase {
 	use SingletonTrait;
@@ -60,7 +61,7 @@ class Loader extends PluginBase {
 		}
 
 		if (!self::$config["APIKey"]) {
-			$this->getScheduler()->scheduleDelayedTask(new InvalidKeyTask(), $this->getServer()->getTicksPerSecond());
+			$this->getScheduler()->scheduleDelayedTask(new InvalidKeyTask(), intval($this->getServer()->getTicksPerSecond()));
 			return;
 		}
 

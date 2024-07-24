@@ -1,6 +1,5 @@
 <?php
 
-// https://github.com/pmmp/PocketMine-MP/blob/stable/.php-cs-fixer.php modified.
 $finder = PhpCsFixer\Finder::create()
 	->in(__DIR__ . '/src');
 

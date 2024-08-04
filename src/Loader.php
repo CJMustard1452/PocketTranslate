@@ -69,8 +69,6 @@ class Loader extends PluginBase {
 	}
 
 	public static function enable() : void {
-		$instance = self::getInstance();
-
 		new ThreadManager();
 		new PocketTranslate();
 
